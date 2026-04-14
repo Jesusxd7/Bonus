@@ -8,9 +8,7 @@
 #include "esp_adc/adc_oneshot.h"
 #include "esp_timer.h"
 
-// ==========================
 // Pines
-// ==========================
 #define SEG_A 13
 #define SEG_B 12
 #define SEG_C 14
@@ -34,11 +32,10 @@
 
 #define POT_ADC_CHANNEL ADC_CHANNEL_6
 
-// ==========================
+
 #define PWM_FREQ 5000
 #define PWM_MAX  1023
 #define DELAY_CAMBIO_MS 500
-// ==========================
 
 const int numeros[10][7] = {
     {1,1,1,1,1,1,0},{0,1,1,0,0,0,0},{1,1,0,1,1,0,1},
@@ -53,17 +50,14 @@ const gpio_num_t segmentos[7] = {
 
 adc_oneshot_unit_handle_t adc1_handle;
 
-// ==========================
 // Estado motor
-// ==========================
 int direccion_actual = 0;
 int direccion_solicitada = 0;
 bool esperando_cambio = false;
 int64_t tiempo_cambio = 0;
 
-// ==========================
+
 // Display
-// ==========================
 void apagar_display(){
     gpio_set_level(DIGIT1,0);
     gpio_set_level(DIGIT2,0);
@@ -91,15 +85,11 @@ void refrescar(int val){
     vTaskDelay(pdMS_TO_TICKS(2));
 }
 
-// ==========================
 // LEDs
-// ==========================
 void led_verde(){ gpio_set_level(LED_VERDE,1); gpio_set_level(LED_ROJO,0); }
 void led_rojo(){ gpio_set_level(LED_VERDE,0); gpio_set_level(LED_ROJO,1); }
 
-// ==========================
 // ADC
-// ==========================
 void adc_init(){
     adc_oneshot_unit_init_cfg_t cfg={.unit_id=ADC_UNIT_1};
     adc_oneshot_new_unit(&cfg,&adc1_handle);
@@ -116,9 +106,7 @@ int leer_adc(){
     return r;
 }
 
-// ==========================
 // PWM
-// ==========================
 void pwm_init(){
     ledc_timer_config_t t={
         .speed_mode=LEDC_LOW_SPEED_MODE,
@@ -169,9 +157,7 @@ void set_pwm(int duty){
     }
 }
 
-// ==========================
 // MAIN
-// ==========================
 void app_main(){
 
     gpio_config_t out={
@@ -225,7 +211,7 @@ void app_main(){
 
         int64_t now=esp_timer_get_time()/1000;
 
-        // 🔥 CAMBIO SEGURO CORREGIDO
+        //CAMBIO SEGURO CORREGIDO
         if(!esperando_cambio && direccion_solicitada!=direccion_actual){
             apagar_motor();
             esperando_cambio=true;
@@ -241,7 +227,7 @@ void app_main(){
             }
         }
 
-        // Aplicar PWM siempre
+    
         set_pwm(duty);
     }
 }
