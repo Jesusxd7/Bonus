@@ -211,7 +211,7 @@ void app_main(){
 
         int64_t now=esp_timer_get_time()/1000;
 
-        //CAMBIO SEGURO CORREGIDO
+        //CAMBIO SEGURO 
         if(!esperando_cambio && direccion_solicitada!=direccion_actual){
             apagar_motor();
             esperando_cambio=true;
